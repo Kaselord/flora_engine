@@ -10,21 +10,55 @@ Uint8 bg_colour_b = 127;
 
 typedef struct DrawablePolygon {
     SDL_Vertex *vertices;
-    int vertex_count;
+    uint vertex_count;
     // optional!
     SDL_Texture *texture;
 } DrawablePolygon;
 
 typedef struct DrawableRect {
+    SDL_Rect *rect;
     Uint8 r;
     Uint8 g;
     Uint8 b;
     Uint8 a;
-    SDL_Rect rect;
 } DrawableRect;
 
+// info on what kinds of drawables should be rendered in what order
+char draw_queue_indices[128] = {};
 DrawablePolygon draw_queue_polygons[64];
 DrawableRect draw_queue_rects[64];
+// how much of the polygon drawing space is taken up
+uint draw_space_taken_polygon = 0;
+// how much of the rect drawing space is taken up
+uint draw_space_taken_rect = 0;
+// how much drawing space is taken up in total
+uint draw_space_taken_global = 0;
+
+uint add_drawable_polygon(SDL_Vertex *vertices, uint vertex_count, SDL_Texture *texture) {
+    DrawablePolygon polygon = {vertices, vertex_count, texture};
+    // add polygon to polygon draw queue
+    draw_queue_polygons[draw_space_taken_polygon] = polygon;
+    // the next thing in queue to be drawn will be p - polygon
+    draw_queue_indices[draw_space_taken_global] = 'p';
+    // update length of polygon draw queue
+    draw_space_taken_polygon++;
+    // update length of global draw queue
+    draw_space_taken_global++;
+    return draw_space_taken_global - 1;
+}
+
+uint add_drawable_rect(SDL_Rect *rect_object, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    DrawableRect rect = {rect_object, r, g, b, a};
+    // add rect to rect draw queue
+    draw_queue_rects[draw_space_taken_rect] = rect;
+    // the next thing in queue to be drawn will be r - rect
+    draw_queue_indices[draw_space_taken_global] = 'r';
+    // update length of polygon draw queue
+    draw_space_taken_rect++;
+    // update length of global draw queue
+    draw_space_taken_global++;
+    return draw_space_taken_global - 1;
+}
 
 void initialize_rendering(void) {
     game_window = SDL_CreateWindow("fire engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1024, 640, 0);
