@@ -40,6 +40,7 @@ void game_loop(void) {
 
 int main(void) {
 	initialize_rendering();
+	SDL_Rect rect = {0, 0, 10, 10};
 	game_loop();
 	float exit_time = SDL_GetTicks() / 1000.0;
 	printf("application quit after running for %f seconds\n", exit_time);

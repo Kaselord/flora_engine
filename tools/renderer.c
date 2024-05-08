@@ -9,14 +9,14 @@ Uint8 bg_colour_g = 0;
 Uint8 bg_colour_b = 127;
 
 typedef struct DrawablePolygon {
-    SDL_Vertex *vertices;
+    SDL_Vertex vertices;
     uint vertex_count;
     // optional!
     SDL_Texture *texture;
 } DrawablePolygon;
 
 typedef struct DrawableRect {
-    SDL_Rect *rect;
+    SDL_Rect rect;
     Uint8 r;
     Uint8 g;
     Uint8 b;
@@ -34,7 +34,7 @@ uint draw_space_taken_rect = 0;
 // how much drawing space is taken up in total
 uint draw_space_taken_global = 0;
 
-uint add_drawable_polygon(SDL_Vertex *vertices, uint vertex_count, SDL_Texture *texture) {
+uint add_drawable_polygon(SDL_Vertex vertices, uint vertex_count, SDL_Texture *texture) {
     DrawablePolygon polygon = {vertices, vertex_count, texture};
     // add polygon to polygon draw queue
     draw_queue_polygons[draw_space_taken_polygon] = polygon;
@@ -47,7 +47,7 @@ uint add_drawable_polygon(SDL_Vertex *vertices, uint vertex_count, SDL_Texture *
     return draw_space_taken_global - 1;
 }
 
-uint add_drawable_rect(SDL_Rect *rect_object, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+uint add_drawable_rect(SDL_Rect rect_object, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
     DrawableRect rect = {rect_object, r, g, b, a};
     // add rect to rect draw queue
     draw_queue_rects[draw_space_taken_rect] = rect;
