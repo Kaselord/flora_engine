@@ -44,7 +44,7 @@ uint add_drawable_polygon(SDL_Vertex vertices, uint vertex_count, SDL_Texture *t
     draw_space_taken_polygon++;
     // update length of global draw queue
     draw_space_taken_global++;
-    return draw_space_taken_global - 1;
+    return draw_space_taken_polygon - 1;
 }
 
 uint add_drawable_rect(SDL_Rect rect_object, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
@@ -57,7 +57,15 @@ uint add_drawable_rect(SDL_Rect rect_object, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
     draw_space_taken_rect++;
     // update length of global draw queue
     draw_space_taken_global++;
-    return draw_space_taken_global - 1;
+    return draw_space_taken_rect - 1;
+}
+
+void mod_drawable_rect(uint i_rect, SDL_Rect rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    draw_queue_rects[i_rect].rect = rect;
+    draw_queue_rects[i_rect].r = r;
+    draw_queue_rects[i_rect].g = g;
+    draw_queue_rects[i_rect].b = b;
+    draw_queue_rects[i_rect].a = a;
 }
 
 void initialize_rendering(void) {
@@ -77,7 +85,7 @@ void final_render(void) {
 
         switch (draw_queue_indices[i]) {
             case 'r':
-            // render rectangle
+            // -- draw rectangle --
             DrawableRect draw_rect = draw_queue_rects[i_rect];
             SDL_SetRenderDrawColor(game_renderer, draw_rect.r, draw_rect.g, draw_rect.b, draw_rect.a);
             SDL_RenderFillRect(game_renderer, &draw_rect.rect);
@@ -85,6 +93,7 @@ void final_render(void) {
             i_rect++;
             break;
             case 'p':
+            // -- draw polygon --
             puts("polygon");
             // increment polygon index counter
             i_polygon++;

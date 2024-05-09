@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+gcc main.c tools/renderer.c -lSDL2
+./a.out

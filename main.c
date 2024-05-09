@@ -7,6 +7,8 @@ bool game_running = true;
 uint prev_tick_count = 0;
 // the limit is 1000, it's recommended that 1/this has 3 or less digits after the comma
 int target_framerate = 50;
+uint rect_id = 0;
+SDL_Rect rect_b = {300, 500, 200, 100};
 
 
 void handle_input(void) {
@@ -28,7 +30,8 @@ void game_loop(void) {
 
 			// -- game logic under here --
 
-
+			rect_b.x += 1;
+			mod_drawable_rect(rect_id, rect_b, 255, 255, 255, 255);
 
 			// -- rendering stuffs --
 			
@@ -40,10 +43,7 @@ void game_loop(void) {
 
 int main(void) {
 	initialize_rendering();
-	SDL_Rect rect_a = {0, 0, 100, 100};
-	add_drawable_rect(rect_a, 0, 255, 255, 255);
-	SDL_Rect rect_b = {300, 500, 200, 100};
-	add_drawable_rect(rect_b, 255, 255, 100, 255);
+	rect_id = add_drawable_rect(rect_b, 255, 255, 100, 255);
 	game_loop();
 	float exit_time = SDL_GetTicks() / 1000.0;
 	printf("application quit after running for %f seconds\n", exit_time);
