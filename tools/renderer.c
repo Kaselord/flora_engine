@@ -101,8 +101,8 @@ void final_render(void) {
             break;
             case 'p':
             // -- draw polygon --
-            DrawablePolygon draw_polygon = draw_queue_polygons[i_polygon]
-            SDL_RenderGeometry(game_renderer, texture, vertices, vertex_count, NULL, 0)
+            DrawablePolygon draw_polygon = draw_queue_polygons[i_polygon];
+            SDL_RenderGeometry(game_renderer, draw_polygon.texture, &draw_polygon.vertices, draw_polygon.vertex_count, NULL, 0);
             // increment polygon index counter
             i_polygon++;
             break;
